@@ -1,8 +1,10 @@
 package com.example.demo.marqo;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,7 +20,10 @@ public class MarqoService {
     public Object createIndex(String indexName) {
         return webClient.post().uri("/indexes/%s".formatted(indexName))
                 .contentType(MediaType.APPLICATION_JSON)
-                .retrieve().bodyToMono(Object.class).block();
+                .retrieve()
+                .onStatus(HttpStatus.CONFLICT::equals, response -> response.bodyToMono(String.class).map(
+                        Exception::new))
+                .bodyToMono(Object.class).block();
     }
 
     public Object addDocuments(String indexName, List<Document> documents) {
@@ -40,6 +45,9 @@ public class MarqoService {
         return webClient.post().uri("/indexes/%s/search".formatted(indexName))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue("{\"q\":\"%s\"}".formatted(query))
-                .retrieve().bodyToMono(Object.class).block();
+                .retrieve()
+                .onStatus(Predicate.not(HttpStatus.OK::equals), response -> response.bodyToMono(String.class).map(
+                        Exception::new))
+                .bodyToMono(Object.class).block();
     }
 }
