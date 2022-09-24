@@ -13,10 +13,10 @@ public class MarqoService {
     @Autowired
     private WebClient webClient;
 
-    public String createIndex(String indexName) {
+    public Object createIndex(String indexName) {
         return webClient.post().uri("/indexes/%s".formatted(indexName))
                 .contentType(MediaType.APPLICATION_JSON)
-                .retrieve().bodyToMono(String.class).block();
+                .retrieve().bodyToMono(Object.class).block();
     }
 
     public Object addDocuments(String indexName, List<Document> documents) {

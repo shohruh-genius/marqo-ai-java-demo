@@ -23,8 +23,9 @@ class DemoApplicationTests {
 
 	@Test
 	void createIndex() {
-		String response = marqoService.createIndex("my-first-index");
+		Object response = marqoService.createIndex("my-second-index");
 		assertNotNull(response);
+		assertTrue((Boolean) ((HashMap) response).get("acknowledged"));
 	}
 
 	@Test
@@ -36,9 +37,9 @@ class DemoApplicationTests {
 				"The EMU is a spacesuit that provides environmental protection, mobility, life support, and communications for astronauts",
 				"article_591"));
 
-		Object resp = marqoService.addDocuments("my-first-index", documents);
-		assertNotNull(resp);
-		assertTrue((Boolean) ((HashMap) resp).get("errors"));
+		Object response = marqoService.addDocuments("my-first-index", documents);
+		assertNotNull(response);
+		assertTrue((Boolean) ((HashMap) response).get("errors"));
 	}
 
 	@Test
