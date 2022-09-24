@@ -1,22 +1,34 @@
 package com.example.demo.marqo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
+@JsonInclude(Include.NON_NULL)
 public class Document {
     private String title;
     private String description;
-    private String _id;
+    private String id;
 
-    @Override
-    public String toString() {
-        return "{\"Title\":\"%s\",\"Description\":\"%s\"".formatted(title, description)
-                + (_id != null ? ",\"_id\":\"%s\"}".formatted(_id) : "}");
+    @JsonProperty("Title")
+    public String getTitle() {
+        return title;
+    }
+
+    @JsonProperty("Description")
+    public String getDescription() {
+        return description;
+    }
+
+    @JsonProperty("_id")
+    public String getId() {
+        return id;
     }
 }

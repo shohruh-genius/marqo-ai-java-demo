@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,7 +24,8 @@ class DemoApplicationTests {
 
 	@Test
 	void createIndex() {
-		Object response = marqoService.createIndex("my-second-index");
+		Object response = marqoService.createIndex("my-test-index");
+
 		assertNotNull(response);
 		assertTrue((Boolean) ((HashMap) response).get("acknowledged"));
 	}
@@ -37,16 +39,16 @@ class DemoApplicationTests {
 				"The EMU is a spacesuit that provides environmental protection, mobility, life support, and communications for astronauts",
 				"article_591"));
 
-		Object response = marqoService.addDocuments("my-first-index", documents);
+		Object response = marqoService.addDocuments("my-test-index", documents);
+
 		assertNotNull(response);
-		assertTrue((Boolean) ((HashMap) response).get("errors"));
+		assertFalse((Boolean) ((HashMap) response).get("errors"));
 	}
 
 	@Test
-	void searchQuery() {
+	void searchQuery() throws InterruptedException {
 		String query = "What is the best outfit to wear on the moon?";
-
-		Object result = marqoService.search("my-first-index", query);
+		Object result = marqoService.search("my-test-index", query);
 
 		assertNotNull(result);
 		assertEquals(((HashMap) result).get("query"), query);
